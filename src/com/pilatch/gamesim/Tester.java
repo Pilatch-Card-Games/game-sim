@@ -13,7 +13,7 @@ import com.pilatch.gamesim.weight.*;
 
 public class Tester {
 
-	private static final String delim = ":";
+	private static final String delim = " : ";
 	
 	public static void main(String[] args) throws ParseException{
 		String test = "--help";
@@ -157,7 +157,7 @@ public class Tester {
 	}
 
 	private static void deal(Deck d, int valuedHandSize, int totalHandSize, int handsToDeal, HandEvaluator e) {
-		deal(d, valuedHandSize, totalHandSize, (int)handsToDeal, e);
+		deal(d, valuedHandSize, totalHandSize, (long)handsToDeal, e);
 	}
 	
 	private static void deal(Deck d, int valuedHandSize, int totalHandSize, long handsToDeal, HandEvaluator e){
