@@ -14,6 +14,8 @@ public class DeckFactory {
 			return new Pilatch14Deck();
 		case PILATCH_15:
 			return new Pilatch15Deck();
+		case PILATCH_15_JOKER_UNRANKED:
+			return new Pilatch15JokerUnrankedDeck();
 		default:
 			return null;
 		}

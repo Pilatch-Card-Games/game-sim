@@ -133,11 +133,17 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 			//get the lowest rank in the rankMap each time, and put it in rankOrdered
 			Rank lowestRank = null;
 			for(Rank r : handRanks){
-				if(lowestRank == null || r.getRankNumber().doubleValue() < lowestRank.getRankNumber().doubleValue()){
-					lowestRank = r;
+				if (r.getRankNumber() != null) {
+					if (lowestRank == null) {
+						lowestRank = r;
+					} else if(r.getRankNumber().doubleValue() < lowestRank.getRankNumber().doubleValue()) {
+						lowestRank = r;
+					} 
 				}
 			}
-			rankOrdered.put(lowestRank, rankMap.remove(lowestRank));
+			if (lowestRank != null) {
+				rankOrdered.put(lowestRank, rankMap.remove(lowestRank));
+			}
 		}
 	}
 	
@@ -162,7 +168,10 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 			int lowestRankIndex = 0;
 			for(int i = 0; i < ranks.size(); i++){
 				Rank r = ranks.get(i);
-				if(lowestRank == null || r.getRankNumber().doubleValue() < lowestRank.getRankNumber().doubleValue()){
+				if(
+					r != null &&
+					(lowestRank == null || r.getRankNumber().doubleValue() < lowestRank.getRankNumber().doubleValue())
+				){
 					lowestRank = r;
 					lowestRankIndex = i;
 				}
@@ -200,17 +209,19 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 	}
 	
 	private boolean isSequenceStraight(Iterator<Rank> handIterator){
-		Number handNumber = handIterator.next().getRankNumber();
+		Rank handRank = handIterator.next();
+//		Number handNumber = handIterator.next().getRankNumber();
 		Number rangeNumber = null; //we have not yet begun!
 		int sequence = 0; //the number of ranks in-a-row the hand has
 		rr.restart();
 		
 		//Ace wrap-around case 1:
 		//the last number in the range is the ace and we are on the first rank in the hand
-		if(handNumber.equals(this.aceNumber) && this.acePosition == 1){
+		if(handRank != null && handRank.getRankNumber().equals(this.aceNumber) && this.acePosition == 1){
 			//System.out.println("wrap case 1");
 			sequence = 1;
-			handNumber = handIterator.next().getRankNumber();
+			handRank = handIterator.next();
+//			handNumber = handIterator.next().getRankNumber();
 		}
 		
 		//look through the meaty parts of the rank range
@@ -218,14 +229,14 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 			rangeNumber = rr.next().getRankNumber();
 			//System.out.println("rangeNumber: "+rangeNumber);
 			//System.out.println("handNumber: "+handNumber);
-			if(handNumber.equals(rangeNumber)){
+			if(handRank != null && handRank.getRankNumber().equals(rangeNumber)){
 				//we have a match, move to the next rank in the hand
 				sequence++;
 				if(sequence == this.valuedHandSize){
 					return true;
 				}
 				if(handIterator.hasNext()){
-					handNumber = handIterator.next().getRankNumber();					
+					handRank = handIterator.next();
 				}
 				else{ //we are on the last rank of the hand
 					break;
@@ -244,7 +255,13 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 		System.out.println("handNumber: "+handNumber);*/
 		//Ace wrap-around case 2:
 		//the first number in the range is the ace, and we are on the last number in the hand
-		if(this.acePosition == -1 && sequence == this.valuedHandSize - 1 && handNumber.equals(this.aceNumber) && !handIterator.hasNext()){
+		if(
+				this.acePosition == -1 &&
+				sequence == this.valuedHandSize - 1 &&
+				handRank != null &&
+				handRank.getRankNumber().equals(this.aceNumber) &&
+				!handIterator.hasNext()
+		){
 			//System.out.println("wrap case 2");
 			return true;
 		}

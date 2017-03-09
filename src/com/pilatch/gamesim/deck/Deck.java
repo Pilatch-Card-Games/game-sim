@@ -36,6 +36,10 @@ public abstract class Deck { //make constructors for specific kinds of decks
 		}
 	}
 	
+	public void addCard(Card card) {
+		this.cards.add(card);
+	}
+	
 	public void addCards(ArrayList<Card> cards){
 		this.cards.addAll(cards);
 	}

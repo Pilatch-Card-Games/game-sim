@@ -223,6 +223,54 @@ public class RankedSuitedHandEvaluatorTest {
 		assertTrue(valuedHands.contains("2 of a kind"));
 		assertFalse(valuedHands.contains("straight"));
 	}
+
+//	@Test
+//	public final void testPilatch15JokerUnrankedRawRagsNRiches() {
+//		h.add(new PilatchCard(new Rank(9), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(null), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(13), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(11), PilatchSuit.SCISSORS));
+//		h.add(new PilatchCard(new Rank(null), PilatchSuit.SCISSORS));
+//		h.add(new PilatchCard(new Rank(2), PilatchSuit.ROCK));
+//		h.add(new PilatchCard(new Rank(10), PilatchSuit.ROCK));
+//		assertTrue(h.size() == 7);
+//		e = pilatch14RawWraparoundHandEvaluator;
+//		valuedHands = e.evaluate(h);
+//		assertTrue(valuedHands.toString(), valuedHands.size() == 0);
+//	}
+
+//	@Test
+//	public final void testPilatch15JokerUnrankedRawFlush() {
+//		h.add(new PilatchCard(new Rank(11), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(null), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(13), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(4), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(null), PilatchSuit.SCISSORS));
+//		h.add(new PilatchCard(new Rank(2), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(10), PilatchSuit.ROCK));
+//		assertTrue(h.size() == 7);
+//		e = pilatch14RawWraparoundHandEvaluator;
+//		valuedHands = e.evaluate(h);
+//		assertTrue(valuedHands.toString(), valuedHands.size() == 2);
+//		assertTrue(valuedHands.contains("flush"));
+//	}
+//
+// TODO find out why the unranked tests are infinitely looping!
+//	@Test
+//	public final void testPilatch15JokerUnrankedRawPair() {
+//		h.add(new PilatchCard(new Rank(11), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(null), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(13), PilatchSuit.PAPER));
+//		h.add(new PilatchCard(new Rank(11), PilatchSuit.SCISSORS));
+//		h.add(new PilatchCard(new Rank(null), PilatchSuit.SCISSORS));
+//		h.add(new PilatchCard(new Rank(2), PilatchSuit.ROCK));
+//		h.add(new PilatchCard(new Rank(10), PilatchSuit.ROCK));
+//		assertTrue(h.size() == 7);
+//		e = pilatch14RawWraparoundHandEvaluator;
+//		valuedHands = e.evaluate(h);
+//		assertTrue(valuedHands.toString(), valuedHands.size() == 1);
+//		assertTrue(valuedHands.contains("2 of a kind"));
+//	}
 	
 	@Test
 	public final void testPilatch14RawNoWraparoundNoStraight1() {

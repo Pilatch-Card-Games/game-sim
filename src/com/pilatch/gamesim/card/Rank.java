@@ -31,6 +31,19 @@ public class Rank {
 	
 	@Override
 	public boolean equals(Object o){
-		return o != null && o.getClass() == this.getClass() && ((Rank)o).getRankNumber().equals(this.rankNumber);
+		if (o == null) {
+			return false;
+		}
+		if (o.getClass() == this.getClass()) {
+			Rank otherRank = (Rank)o;
+			if (otherRank.getRankNumber() == this.rankNumber) {
+				return true;
+			}
+			if(otherRank.getRankNumber() == null || this.rankNumber == null) {
+				return false;
+			}
+			return otherRank.getRankNumber().equals(this.rankNumber);
+		}
+		return false;
 	}
 }

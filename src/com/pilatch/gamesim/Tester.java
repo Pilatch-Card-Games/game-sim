@@ -31,6 +31,8 @@ public class Tester {
 			pokerBest5of7();
 		}else if("pilatch14stud5".equals(test)){
 			pilatch14stud5();
+		}else if("pilatch15JokerUnranked".equals(test)) {
+			pilatch15JokerUnranked();
 		}else if("pilatch4point0".equals(test)){
 			pilatch4point0();
 		}else if("originalPilatch".equals(test)){
@@ -135,6 +137,16 @@ public class Tester {
 		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);
 	}
 
+	public static void pilatch15JokerUnranked() {
+		Deck d = DeckFactory.newDeck(DeckType.PILATCH_15_JOKER_UNRANKED);
+		int valuedHandSize = 5;
+		int totalHandSize = 7;
+		int handsToDeal = 10000;
+		RankRange rr = new IntegerRankRange(1, 14);
+		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, false, null);
+		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);
+	}
+	
 	public static void pilatch15() {
 		Deck d = DeckFactory.newDeck(DeckType.PILATCH_15);
 		int valuedHandSize = 5;
