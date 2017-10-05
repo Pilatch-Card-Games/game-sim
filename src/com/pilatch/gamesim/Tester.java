@@ -29,6 +29,12 @@ public class Tester {
 			poker5CardStud();			
 		}else if("pokerBest5of7".equals(test)){
 			pokerBest5of7();
+		}else if("threeSuitFiveCardStud".equals(test)){
+			threeSuitFiveCardStud();
+		}else if("threeSuitHoldEm".equals(test)){
+			threeSuitHoldEm();
+		}else if("threeSuitHoldEmWeighted".equals(test)){
+			threeSuitHoldEmWeighted();
 		}else if("pilatch14stud5".equals(test)){
 			pilatch14stud5();
 		}else if("pilatch4point0".equals(test)){
@@ -70,6 +76,37 @@ public class Tester {
 		LinkedList<String> weightScale = PokerWeightScale.getInstance();
 		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, true, weightScale);
 		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);		
+	}
+
+	public static void threeSuitFiveCardStud() {
+		Deck d = DeckFactory.newDeck(DeckType.PILATCH_WITH_ACES);
+		int valuedHandSize = 5;
+		int totalHandSize = 5;
+		int handsToDeal = 1000000;
+		RankRange rr = new IntegerRankRange(1, 13, new PokerNamedRanks());
+		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, true, null);
+		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);
+	}
+
+	public static void threeSuitHoldEm() {
+		Deck d = DeckFactory.newDeck(DeckType.PILATCH_WITH_ACES);
+		int valuedHandSize = 5;
+		int totalHandSize = 7;
+		int handsToDeal = 1000000;
+		RankRange rr = new IntegerRankRange(1, 13, new PokerNamedRanks());
+		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, true, null);
+		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);
+	}
+
+	public static void threeSuitHoldEmWeighted() {
+		Deck d = DeckFactory.newDeck(DeckType.PILATCH_WITH_ACES);
+		int valuedHandSize = 5;
+		int totalHandSize = 7;
+		int handsToDeal = 1000000;
+		RankRange rr = new IntegerRankRange(1, 13, new PokerNamedRanks());
+		LinkedList<String> weightScale = ThreeSuitFiveCardStudWeightScale.getInstance();
+		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, true, weightScale);
+		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);
 	}
 	
 	public static void pilatch6point0() {

@@ -21,7 +21,6 @@ import com.pilatch.gamesim.util.HighToLowIntegerComparator;
 public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniformBackCard> {
 
 	private int valuedHandSize;
-	//private HashMap<Number, String> namedRanks;
 	LinkedList<String> weightScale;
 	RankRange rr;
 	private Number aceNumber = null;
@@ -70,7 +69,6 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 		HashMap<Suit, LinkedList<Rank>> suitOrdered = new HashMap<Suit, LinkedList<Rank>>();
 		order(h, rankOrdered, suitOrdered);
 		
-		//this.matches(rankOrdered, valuedHands); //not as comprehensive as subMatches
 		try{
 			this.subMatches(rankOrdered, valuedHands);
 		}catch (InvertedBoatStringException ibse){
@@ -208,7 +206,6 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 		//Ace wrap-around case 1:
 		//the last number in the range is the ace and we are on the first rank in the hand
 		if(handNumber.equals(this.aceNumber) && this.acePosition == 1){
-			//System.out.println("wrap case 1");
 			sequence = 1;
 			handNumber = handIterator.next().getRankNumber();
 		}
@@ -216,8 +213,6 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 		//look through the meaty parts of the rank range
 		while(rr.hasNext()){
 			rangeNumber = rr.next().getRankNumber();
-			//System.out.println("rangeNumber: "+rangeNumber);
-			//System.out.println("handNumber: "+handNumber);
 			if(handNumber.equals(rangeNumber)){
 				//we have a match, move to the next rank in the hand
 				sequence++;
@@ -236,12 +231,8 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 			else{
 				sequence = 0;
 			}
-			//System.out.println("sequence: "+sequence);
 		}
 		
-		
-		/*System.out.println("after loop");
-		System.out.println("handNumber: "+handNumber);*/
 		//Ace wrap-around case 2:
 		//the first number in the range is the ace, and we are on the last number in the hand
 		if(this.acePosition == -1 && sequence == this.valuedHandSize - 1 && handNumber.equals(this.aceNumber) && !handIterator.hasNext()){
@@ -321,14 +312,6 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 		}
 		return ofAKindNum;
 	}
-
-/*	private TreeMap<Integer, Integer> trimMatchesToValuedHandSize(LinkedHashMap<Rank, LinkedList<Suit>> ordered, Comparator<Integer> comparator){
-		return trimMatchesToValuedHandSize(ordered, null, comparator);
-	}
-	
-	private TreeMap<Integer, Integer> trimMatchesToValuedHandSize(LinkedHashMap<Rank, LinkedList<Suit>> ordered){
-		return trimMatchesToValuedHandSize(ordered, null, null);
-	}*/
 	
 	private TreeMap<Integer, Integer> trimMatchesToValuedHandSize(LinkedHashMap<Rank, LinkedList<Suit>> ordered, Integer handSize){
 		return trimMatchesToValuedHandSize(ordered, handSize, null);
@@ -337,22 +320,17 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 	//this algorithm is forced to traverse the matches high to low
 	private TreeMap<Integer, Integer> trimMatchesToValuedHandSize(LinkedHashMap<Rank, LinkedList<Suit>> ordered, Integer handSize, HighToLowIntegerComparator comparator){
 		TreeMap<Integer, Integer> ofAKindNum = makeOfAKindNum(ordered, comparator);
-		//System.out.println("start: "+ofAKindNum);
 		Iterator<Integer> oakIterator = ofAKindNum.keySet().iterator();
 		int totalMatchingCards = 0;
 		if(handSize == null){
 			handSize = this.valuedHandSize;
 		}
-		//System.out.println(handSize);
+
 		while(oakIterator.hasNext()){
 			Integer ofAKind = oakIterator.next();
 			totalMatchingCards += ofAKind * ofAKindNum.get(ofAKind);
 		}
-/*		if(totalMatchingCards > handSize){
-			System.out.println("too big!");
-		}else{
-			System.out.println("not too big!");
-		}*/
+
 		oakIterator = ofAKindNum.keySet().iterator(); //restart the iteration
 		if(!oakIterator.hasNext()){
 			return null;
@@ -380,12 +358,6 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 				}
 				totalMatchingCards--;
 			}
-			/*if(numOfAKind == 0){
-				try{
-				}catch(ConcurrentModificationException cme){
-					return null;
-				}
-			}*/
 			oakIterator = ofAKindNum.keySet().iterator(); //stick to the biggest while you can
 			ofAKind = oakIterator.next(); //start at the beginning again, whatever the beginning may be					
 			numOfAKind = ofAKindNum.get(ofAKind);
@@ -398,69 +370,11 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 				highToLowOfAKindNum.put(i, ofAKindNum.get(i));
 			}
 			ofAKindNum = highToLowOfAKindNum;
-			//return highToLowOfAKindNum;
 		}
-		//System.out.println("handSize: "+handSize+", result: "+ofAKindNum);
+
 		return ofAKindNum;
 	}
 	
-/*
-	private TreeMap<Integer, Integer> trimMatchesToValuedHandSize(LinkedHashMap<Rank, LinkedList<Suit>> ordered, Integer handSize, Comparator<Integer> comparator){
-		TreeMap<Integer, Integer> ofAKindNum = comparator == null ? makeOfAKindNum(ordered) : makeOfAKindNum(ordered, comparator); //ordered low to high
-		//look through the whole tree map, and count the total number of cards
-		Iterator<Integer> oakIterator = ofAKindNum.keySet().iterator();
-		int totalMatchingCards = 0;
-		if(handSize == null){
-			handSize = this.valuedHandSize;
-		}
-		//System.out.println(handSize);
-		while(oakIterator.hasNext()){
-			Integer ofAKind = oakIterator.next();
-			totalMatchingCards += ofAKind * ofAKindNum.get(ofAKind);
-		}
-		oakIterator = ofAKindNum.keySet().iterator(); //restart the iteration
-		if(totalMatchingCards > handSize){
-			//System.out.println("totalMatchingCards: "+totalMatchingCards); //6
-			//System.out.println("handSize: "+handSize); //2
-			//too many matches; start trimming
-			Integer ofAKind = oakIterator.next(); //we want this to throw an exception if it fails
-			int totalTrimmed = 0;
-			while(totalMatchingCards - totalTrimmed > handSize){
-				//System.out.println("ofAKind: "+ofAKind);
-				Integer numOfThisKind = ofAKindNum.get(ofAKind);
-				while(numOfThisKind != 0 && totalMatchingCards - totalTrimmed > handSize){
-					//System.out.println("numOfThisKind: "+numOfThisKind);
-					//reduce the frequency of this kind
-					if(ofAKind == 2){ //we can't get smaller matches; delete one of them
-						ofAKindNum.put(ofAKind, --numOfThisKind);
-						if(ofAKindNum.get(ofAKind) == 0){
-							try{
-								oakIterator.remove();
-							}
-							catch(java.util.ConcurrentModificationException e){
-								System.out.println(ordered);
-								System.out.println(ofAKindNum);
-								throw new java.util.ConcurrentModificationException(e.getMessage());
-							}
-						}
-						totalTrimmed += 2;
-					}
-					else{ //decrement numOfAKind, and demote one to the lowerOfAKind
-						Integer lowerOfAKind = ofAKind - 1;
-						//we can move this down a level; e.g. a triple becomes a pair
-						Integer numOfLowerKind = ofAKindNum.get(lowerOfAKind);
-						ofAKindNum.put(lowerOfAKind, numOfLowerKind == null ? 1 : numOfLowerKind + 1);
-						totalTrimmed++;
-						//restart the iterator because we have affected the underlying data
-						oakIterator = ofAKindNum.keySet().iterator();							
-					}
-				}
-			}
-		}
-		//System.out.println("");
-		return ofAKindNum; //returns it sorted
-	}
-*/	
 	private String ofAKindFormat(Integer ofAKind){
 		return ofAKind.toString() + " of a kind";
 	}
@@ -468,11 +382,6 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 	private String multiOfAKindFormat(Integer numOfThisKind, Integer ofAKind){
 		return (numOfThisKind > 1 ? numOfThisKind.toString() + "x " : "") + ofAKindFormat(ofAKind);
 	}
-	
-/*	private void matches(LinkedHashMap<Rank, LinkedList<Suit>> ordered, LinkedList<String> valuedHands){
-		TreeMap<Integer, Integer> ofAKindNum = trimMatchesToValuedHandSize(ordered); //ordered high to low
-		matches(ofAKindNum, valuedHands);
-	}*/
 
 	private void saveMatches(ValuedMatches vm, LinkedList<String> valuedHands)throws InvertedBoatStringException{
 		for(TreeMap<Integer,Integer> ofAKindNum : vm){
@@ -509,69 +418,14 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 	private void subMatches(LinkedHashMap<Rank, LinkedList<Suit>> ordered, LinkedList<String> valuedHands)throws InvertedBoatStringException{
 		ValuedMatches vm = new ValuedMatches();
 		for(int i = this.valuedHandSize; i != 1; i--){
-			//System.out.println("i: "+i);
 			TreeMap<Integer, Integer> ofAKindNum = trimMatchesToValuedHandSize(ordered, i, new HighToLowIntegerComparator()); //ordered high to low
-			//System.out.println(ofAKindNum);
 			addMatches(ofAKindNum, vm);
 			if(i != 2){
 				ofAKindNum = trimMatchesToValuedHandSize(ordered, i); //ordered low to high
-				//System.out.println(ofAKindNum);
 				addMatches(ofAKindNum, vm);
-				//System.out.println("i: "+i);				
 			}
 		}
-		//System.out.println("***saving matches***");
 		saveMatches(vm, valuedHands);
 	}
-/*	
-	private void countLesserMatches(Integer ofAKind, Integer ofAKindNum, TreeMap<Integer,Integer>lesserOfAKindNum, LinkedList<String> valuedHands){
-		
-		for(int i=ofAKind; i > 1; i--){
-			String match = ofAKindFormat(ofAKind);
-			if(!valuedHands.contains(match)){
-				valuedHands.add(match);
-			}
-			if(i > 2){
-				Integer lesserOfAKind = i-1;
-				Integer numOfLesserKind = lesserOfAKindNum.get(lesserOfAKind);
-				if(numOfLesserKind == null){
-					lesserOfAKindNum.put(lesserOfAKind, 1);
-				}else{
-					lesserOfAKindNum.put(lesserOfAKind, numOfLesserKind + 1);					
-				}
-			}
-			Integer currentOfAKindInLesser = lesserOfAKindNum.get(i);
-			if(currentOfAKindInLesser != null){
-				if(currentOfAKindInLesser == 1){
-					lesserOfAKindNum.remove(i);
-				}else{
-					lesserOfAKindNum.put(i, ofAKindNum - 1);					
-				}
-			}
-		}
-	}
-	
-/*	//ofAKindNum are ordered high to low
-	private void subMatches(TreeMap<Integer, Integer> ofAKindNum, LinkedList<String> valuedHands){
-		System.out.println(ofAKindNum);
-		//first, evaluate the hand as it is.
-		matches(ofAKindNum, valuedHands);
-		
-		//create another treemap that grows
-		TreeMap<Integer, Integer> subOfAKindNum = new TreeMap<Integer, Integer>(new HighToLowIntegerComparator());
-		
-		Integer ofAKind = null;
-		Integer numOfThisKind = null;
-		Iterator<Integer> oakIterator = ofAKindNum.keySet().iterator();
-		while(oakIterator.hasNext()){
-			ofAKind = oakIterator.next();
-			numOfThisKind = ofAKindNum.get(ofAKind);
-			for(int i = 1; i <= numOfThisKind; i++){
-				subOfAKindNum.put(ofAKind, numOfThisKind);
-				System.out.println(subOfAKindNum);
-				matches(subOfAKindNum, valuedHands);				
-			}
-		}
-	}*/
 	
 }
