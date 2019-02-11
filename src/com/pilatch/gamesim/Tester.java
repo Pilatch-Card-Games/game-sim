@@ -49,6 +49,10 @@ public class Tester {
 			tourneyPilatch();
 		}else if("rainbowPokerSingleSuit".equals(test)){
 			rainbowPokerSingleSuit();
+		}else if("rainbowPokerSingleSuitBestOf4".equals(test)){
+			rainbowPokerSingleSuitBestOf4();
+		}else if("rainbowPokerSingleSuitBestOf3".equals(test)){
+			rainbowPokerSingleSuitBestOf3();
 		}else{
 			HandProbabilityAffectingRules rules = RulesInterpreter.interpret(args);
 			if(rules != null) {
@@ -199,6 +203,26 @@ public class Tester {
 		Deck d = DeckFactory.newDeck(DeckType.RAINBOW_POKER_SINGLE_SUIT);		
 		int valuedHandSize = 5;
 		int totalHandSize = 5;
+		int handsToDeal = 1000000;
+		RankRange rr = new IntegerRankRange(10, 14, new Pilatch14NamedRanks());
+		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, false, null);
+		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);		
+	}
+
+	public static void rainbowPokerSingleSuitBestOf4(){
+		Deck d = DeckFactory.newDeck(DeckType.RAINBOW_POKER_SINGLE_SUIT);		
+		int valuedHandSize = 4;
+		int totalHandSize = 4;
+		int handsToDeal = 1000000;
+		RankRange rr = new IntegerRankRange(10, 14, new Pilatch14NamedRanks());
+		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, false, null);
+		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);		
+	}
+
+	public static void rainbowPokerSingleSuitBestOf3(){
+		Deck d = DeckFactory.newDeck(DeckType.RAINBOW_POKER_SINGLE_SUIT);		
+		int valuedHandSize = 3;
+		int totalHandSize = 3;
 		int handsToDeal = 1000000;
 		RankRange rr = new IntegerRankRange(10, 14, new Pilatch14NamedRanks());
 		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, false, null);
