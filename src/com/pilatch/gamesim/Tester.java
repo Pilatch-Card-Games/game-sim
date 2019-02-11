@@ -201,7 +201,7 @@ public class Tester {
 		int totalHandSize = 5;
 		int handsToDeal = 1000000;
 		RankRange rr = new IntegerRankRange(10, 14, new Pilatch14NamedRanks());
-		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, true, null);
+		HandEvaluator e = new RankedSuitedHandEvaluator(valuedHandSize, rr, false, null);
 		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);		
 	}
 	
