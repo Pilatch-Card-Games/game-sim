@@ -14,6 +14,8 @@ public class DeckFactory {
 			return new Pilatch14Deck();
 		case PILATCH_15:
 			return new Pilatch15Deck();
+		case RAINBOW_POKER_SINGLE_SUIT:
+			return new RainbowPokerSingleSuitDeck();
 		default:
 			return null;
 		}
