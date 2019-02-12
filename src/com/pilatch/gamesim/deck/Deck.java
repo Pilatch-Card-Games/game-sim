@@ -13,16 +13,23 @@ import com.pilatch.gamesim.ranks.RankRange;
 public abstract class Deck { //make constructors for specific kinds of decks
 	private ArrayList<Card> cards;
 	private RankRange rankRange;
-	
-	protected void buildRankedSuitedCards(RankRange range, Suit[] suits){
+
+	protected void buildRankedSuitedCardsRepeatedly(RankRange range, Suit[] suits, int iterations){
 		this.rankRange = range;
 		this.cards = new ArrayList<Card>();
-		while(range.hasNext()){
-			Rank r = range.next();
-			for(Suit s : suits){
-				this.cards.add(new RankedSuitedUniformBackCard(r, s));
+		for (int i = 0; i < iterations; i++) {			
+			while(range.hasNext()){
+				Rank r = range.next();
+				for(Suit s : suits){
+					this.cards.add(new RankedSuitedUniformBackCard(r, s));
+				}
 			}
+			range.restart();
 		}
+	}
+	
+	protected void buildRankedSuitedCards(RankRange range, Suit[] suits){
+		buildRankedSuitedCardsRepeatedly(range, suits, 1);
 	}
 	
 	protected void buildRankedSuitedCards(RankRange range, Suit[] suits, Hashtable<Rank, String> rankNames){

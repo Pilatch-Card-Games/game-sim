@@ -102,7 +102,7 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 	 * groups the hand by suit -> the ranks of the cards of that rank
 	 * @param h
 	 */
-	private void order(Hand<RankedSuitedUniformBackCard> h, LinkedHashMap<Rank, LinkedList<Suit>> rankOrdered, HashMap<Suit, LinkedList<Rank>> suitOrdered){
+	protected void order(Hand<RankedSuitedUniformBackCard> h, LinkedHashMap<Rank, LinkedList<Suit>> rankOrdered, HashMap<Suit, LinkedList<Rank>> suitOrdered){
 		//go through all the cards in the hand, which is random
 		RankSuitMap rankMap = new RankSuitMap();
 		for(RankedSuitedUniformBackCard card : h){
@@ -153,6 +153,8 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 	
 	//only to be called if a hand is a flush
 	private void straightFlush(LinkedList<Rank> ranks, LinkedList<String> valuedHands){
+		if (ranks.size() < this.valuedHandSize) return;
+
 		ArrayList<Rank> orderedRanks = new ArrayList<Rank>();
 		//put the ranks in order
 		while(ranks.size() != 0){
@@ -243,7 +245,7 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 		return false;
 	}
 	
-	private void straight(LinkedHashMap<Rank, LinkedList<Suit>> ordered, LinkedList<String> valuedHands){
+	protected void straight(LinkedHashMap<Rank, LinkedList<Suit>> ordered, LinkedList<String> valuedHands){
 		//a hand with fewer ranks in it than the valued hand size cannot be a straight
 		if(ordered.size() < this.valuedHandSize){
 			return;
@@ -415,7 +417,7 @@ public class RankedSuitedHandEvaluator extends HandEvaluator<RankedSuitedUniform
 		}
 	}
 	
-	private void subMatches(LinkedHashMap<Rank, LinkedList<Suit>> ordered, LinkedList<String> valuedHands)throws InvertedBoatStringException{
+	protected void subMatches(LinkedHashMap<Rank, LinkedList<Suit>> ordered, LinkedList<String> valuedHands)throws InvertedBoatStringException{
 		ValuedMatches vm = new ValuedMatches();
 		for(int i = this.valuedHandSize; i != 1; i--){
 			TreeMap<Integer, Integer> ofAKindNum = trimMatchesToValuedHandSize(ordered, i, new HighToLowIntegerComparator()); //ordered high to low
