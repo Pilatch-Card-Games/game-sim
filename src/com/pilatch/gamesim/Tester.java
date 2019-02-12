@@ -47,6 +47,8 @@ public class Tester {
 			pilatch6point0();
 		}else if("tourneyPilatch".equals(test)){
 			tourneyPilatch();
+		}else if("rainbowPoker".equals(test)){
+			rainbowPoker();
 		}else if("rainbowPokerSingleSuit".equals(test)){
 			rainbowPokerSingleSuit();
 		}else if("rainbowPokerSingleSuitBestOf4".equals(test)){
@@ -199,6 +201,16 @@ public class Tester {
 		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);
 	}
 
+	public static void rainbowPoker(){
+		Deck d = DeckFactory.newDeck(DeckType.RAINBOW_POKER);
+		int valuedHandSize = 5;
+		int totalHandSize = 15;
+		int handsToDeal = 1000000;
+		RankRange rr = new IntegerRankRange(10, 14, new Pilatch14NamedRanks());
+		HandEvaluator e = new SuitSplittingRankedHandEvaluator(valuedHandSize, rr);
+		deal(d, valuedHandSize, totalHandSize, handsToDeal, e);
+	}
+	
 	public static void rainbowPokerSingleSuit(){
 		Deck d = DeckFactory.newDeck(DeckType.RAINBOW_POKER_SINGLE_SUIT);		
 		int valuedHandSize = 5;
